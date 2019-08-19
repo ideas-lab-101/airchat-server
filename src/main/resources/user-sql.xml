@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlGroup name="user">
+	<sql id="getUserList-select">
+		SELECT u.UserID,u.LoginName,u.Caption,u.Password,ur.AddTime,ur.blnPrimary,r.Description
+		,u.OpenID,u.intState
+	</sql>
+	<sql id="getUserList-from">
+		FROM sys_users u
+		Left JOIN sys_roles r ON r.RoleID=u.RoleID
+		Left JOIN sys_userOrgRelation ur ON ur.UserID=u.UserID
+		WHERE r.RoleID=? and ur.OrgID=?
+	</sql>
+	<sql id="userLoginIdentify">
+		select ul.id user_id,ul.login_name,ul.snnumber,ul.role_id,ui.username
+		,ui.age,ui.birthday,ui.sex,ui.constellation,ui.avatar_url,ui.background_url,ui.email,ui.hobbies,ui.introduction
+		from user_login ul
+		left join user_info ui on ui.user_id=ul.id
+		where ul.login_name=? and ul.password=?
+	</sql>
+    <sql id="userLoginIdentifyMD5">
+        select u.UserID,u.RoleID,u.LoginName,u.Password,u.Caption
+		,us.SexID,us.AvatarURL,us.BackgroundURL
+        from sys_users u
+		left join sys_userSetting us on us.UserID=u.UserID
+        where u.LoginName=? and md5(u.Password)=?
+    </sql>
+    <sql id="getUserInfo">
+		select ul.id user_id,ul.login_name,ul.snnumber,ul.role_id ,ui.username
+		,ui.age,ui.birthday,ui.sex,ui.constellation,ui.avatar_url,ui.background_url,ui.email,ui.hobbies,ui.introduction
+		from user_login ul
+		left join user_info ui on ui.user_id=ul.id
+		where ul.id=?
+    </sql>
+    <sql id="userAuth">
+        select ul.id,ul.login_name,ud.os_type,ud.token,ui.voice_settings
+        from user_login ul
+        left join user_device ud on ud.user_id=ul.id and ud.state = 1
+        left join user_info ui on ui.user_id=ul.id
+        where ul.login_name=? and ul.password=?
+    </sql>
+</sqlGroup>
+

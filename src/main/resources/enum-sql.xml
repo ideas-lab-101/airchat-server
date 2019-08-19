@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlGroup name="enum">
+	<sql id="getEnumDetail">
+        select ed.* from sys_enumDetail ed
+        inner join sys_enumMaster em on em.MasterID=ed.MasterID
+        where ed.intState=1 and em.intState=1 and em.MasterID=?
+        order by ed.Code
+    </sql>
+</sqlGroup>
+

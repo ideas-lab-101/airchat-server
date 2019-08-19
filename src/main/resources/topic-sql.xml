@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlGroup name="topic">
+    <sql id="getTopicList-select">
+        select zone.*
+    </sql>
+    <sql id="getTopicList-from">
+        from (select distinct ui.username,ui.avatar_url,ui.username label,tb.*
+        from topic_baseInfo tb
+        inner join user_info ui on ui.user_id=tb.user_id
+        where ui.user_id=?
+        union all
+        select distinct ui.username,ui.avatar_url,cf.label,tb.*
+        from topic_baseInfo tb
+        inner join contact_friend cf on cf.friend_id=tb.user_id
+        inner join user_info ui on ui.user_id=cf.friend_id
+        where cf.user_id=?) zone
+    </sql>
+	<sql id="getTopicInfo">
+
+	</sql>
+</sqlGroup>
+
