@@ -73,12 +73,13 @@ public class SystemController extends AppBaseController {
             r  =  Account.dao.regAccount(account, password, languageSettings, name, sex, public_key);
 
             if(r){
+                CacheKit.remove(CacheKey.CACHE_REG_CODE, regToken);
                 rest.success("注册成功").setData(account.toString());
             }else{
                 rest.error("注册失败");
             }
         }else{
-            rest.error("注册码错误").setCode(-2);
+            rest.error("注册码失效").setCode(-2);
         }
         renderJson(rest);
     }
