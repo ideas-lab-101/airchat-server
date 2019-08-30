@@ -1,6 +1,7 @@
 package com.linestorm.looker.service.message;
 
 import com.jfinal.kit.HttpKit;
+import com.jfinal.kit.PropKit;
 import com.linestorm.looker.extend.NotifyType;
 import com.linestorm.looker.model.user.Account;
 import com.sagacity.utility.PropertiesFactoryHelper;
@@ -13,8 +14,7 @@ public class Notify {
 
     public final static Notify dao = new Notify();
 
-    private String notifyApiUrl = PropertiesFactoryHelper.getInstance()
-            .getConfig("notify.url");
+    private String notifyApiUrl = PropKit.get("notify.url");
 
     /**
      * 推送主体
@@ -22,9 +22,10 @@ public class Notify {
      * @param notifyType
      * @return
      */
-    public void notify(String userID, int notifyType, String id){
+    public void notify(String creator, String userID, int notifyType, String id){
         Account account = Account.dao.findById(userID);
         Map<String, String> params = new HashMap<String, String>();
+        params.put("creator", creator);
         params.put("account", account.getStr("login_name"));
         params.put("notifyType", notifyType+"");
         //扩展内容
@@ -33,6 +34,6 @@ public class Notify {
     }
 
     public static void main(String[] args) throws IOException {
-        Notify.dao.notify("1", NotifyType.bubble_notify, "10");
+        Notify.dao.notify("", "1", NotifyType.bubble_notify, "10");
     }
 }

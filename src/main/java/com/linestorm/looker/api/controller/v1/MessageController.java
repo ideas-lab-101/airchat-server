@@ -29,7 +29,7 @@ public class MessageController extends UserBaseController {
 
     @Clear(UserLoginInterceptor.class)
     public void testNotify(){
-        Notify.dao.notify("2", NotifyType.apply_friend, "");
+        Notify.dao.notify("", "2", NotifyType.apply_friend, "");
         responseData.put(ResponseCode.RESULT, true);
         renderJson(responseData);
     }

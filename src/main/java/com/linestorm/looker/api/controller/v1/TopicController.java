@@ -113,25 +113,25 @@ public class TopicController extends UserBaseController {
     public void userLike(){
         boolean r = false;
 
-        JSONObject userInfo = getCurrentUser(getPara("token"));
+        JSONObject user = getCurrentUser(getPara("token"));
         int topic_id = getParaToInt("topic_id", 0);
         int vote = getParaToInt("vote", 0);
 
-        if(Db.find("select * from topic_userVote where topic_id=? and user_id=?", topic_id, userInfo.get("user_id")).size()>0){
+        if(Db.find("select * from topic_userVote where topic_id=? and user_id=?", topic_id, user.get("user_id")).size()>0){
             responseData.put(ResponseCode.MSG, "你已经点赞！");
         }else {
-            TopicVote tv  = new TopicVote().set("topic_id", topic_id).set("user_id", userInfo.get("user_id"))
+            TopicVote tv  = new TopicVote().set("topic_id", topic_id).set("user_id", user.get("user_id"))
                     .set("longtitude", getPara("longtitude")).set("latitude", getPara("latitude")).set("vote", vote).set("created_time", DateUtils.getTimeStamp());
             r = tv.save();
             TopicInfo ti = TopicInfo.dao.findById(topic_id);
             r = ti.set("like_count", ti.getInt("like_count")+1).update();
             //写入与我相关
             String receiverID = ti.getInt("user_id")+"";
-            String content = userInfo.get("username")+"点赞了你的话题";
-            r = new TopicUserNotice().set("topic_id", topic_id).set("user_id", userInfo.get("user_id")).set("notice_id", receiverID)
+            String content = user.get("username")+"点赞了你的话题";
+            r = new TopicUserNotice().set("topic_id", topic_id).set("user_id", user.get("user_id")).set("notice_id", receiverID)
                     .set("data_id", tv.get("id")).set("data_type", "vote").set("notice_content", content)
                     .set("created_time", DateUtils.getTimeStamp()).save();
-            Notify.dao.notify(receiverID, NotifyType.new_comment, "");
+            Notify.dao.notify(user.getString("user_id"), receiverID, NotifyType.new_comment, "");
             if(r){
                 responseData.put(ResponseCode.MSG, "点赞成功！");
             }else{
@@ -182,11 +182,11 @@ public class TopicController extends UserBaseController {
     public void addComment(){
         int topic_id = getParaToInt("topic_id");
         int refer_id = getParaToInt("refer_id", 0); //直接针对topic的回复
-        JSONObject userInfo = getCurrentUser(getPara("token"));
+        JSONObject user = getCurrentUser(getPara("token"));
         String text_comment = getPara("text_comment");
         boolean r = false;
 
-        TopicComment tc  = new TopicComment().set("refer_id", refer_id).set("topic_id",topic_id).set("user_id",userInfo.get("user_id"))
+        TopicComment tc  = new TopicComment().set("refer_id", refer_id).set("topic_id",topic_id).set("user_id",user.get("user_id"))
                 .set("text_comment", text_comment).set("is_readed",0).set("deleted", 0)
                 .set("created_time", DateUtils.getTimeStamp());
         r = tc.save();
@@ -196,22 +196,22 @@ public class TopicController extends UserBaseController {
         //组装@我相关的数据
         String content = "", data_type = "", receiverID = "";
         if(refer_id == 0){ //话题回复
-            content = userInfo.get("username")+"评论了你的话题……";
+            content = user.get("username")+"评论了你的话题……";
             data_type = "comment";
             receiverID = ti.getInt("user_id")+"";
         }else { //对回复的回复
-            content = userInfo.get("username")+"回复了你的评论……";
+            content = user.get("username")+"回复了你的评论……";
             data_type = "reply";
             TopicComment tm = TopicComment.dao.findFirst("select * from topic_comment where id=?", refer_id);
             receiverID = tm.getInt("user_id")+"";
         }
         //写入与我相关
-        r = new TopicUserNotice().set("topic_id", topic_id).set("user_id", userInfo.get("user_id")).set("notice_id", receiverID)
+        r = new TopicUserNotice().set("topic_id", topic_id).set("user_id", user.get("user_id")).set("notice_id", receiverID)
                 .set("data_id", tc.get("id")).set("data_type", data_type).set("notice_content", text_comment)
                 .set("created_time", DateUtils.getTimeStamp()).save();
         //组装推送数据
         String[] receivers = new String[]{receiverID};
-        Notify.dao.notify(receiverID, NotifyType.new_comment, "");
+        Notify.dao.notify(user.getString("user_id"), receiverID, NotifyType.new_comment, "");
         PushMessage.dao.push(receivers, content, true, 2);
         if(r){
             responseData.put(ResponseCode.MSG, "评论成功！");

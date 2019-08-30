@@ -41,7 +41,7 @@ public class SystemController extends UserBaseController {
 
     @Clear(UserLoginInterceptor.class)
     public void test(){
-        Notify.dao.notify("1", NotifyType.bubble_notify, "7");
+        Notify.dao.notify("", "1", NotifyType.bubble_notify, "7");
         renderJson(ResponseCode.MSG, "测试Push接口");
 
 //        MailKit.send("13709080203@139.com", null, "千寻注册码", "采用阿里云邮箱");

@@ -82,7 +82,7 @@ public class ContactController extends UserBaseController{
             //给用户发送消息
             new Thread(){
                 public void run(){
-                    Notify.dao.notify(friend_id + "", NotifyType.del_friend, "");
+                    Notify.dao.notify(user.getString("user_id"), friend_id + "", NotifyType.del_friend, "");
                 }
             }.start();
 
@@ -112,7 +112,7 @@ public class ContactController extends UserBaseController{
             final String[] receivers = new String[]{user_id+""};
             new Thread(){
                 public void run(){
-                    Notify.dao.notify(user_id+"", NotifyType.apply_friend, "");
+                    Notify.dao.notify(user.getString("user_id"), user_id+"", NotifyType.apply_friend, "");
                     PushMessage.dao.push(receivers, content, true, 3);
                 }
             }.start();
@@ -163,7 +163,7 @@ public class ContactController extends UserBaseController{
             final String cc = content;
             new Thread(){
                 public void run(){
-                Notify.dao.notify(user_id + "", NotifyType.confirm_friend, "");
+                Notify.dao.notify(user.getString("user_id"),user_id + "", NotifyType.confirm_friend, "");
                 PushMessage.dao.push(receivers, cc, true, 3);
                 }
             }.start();

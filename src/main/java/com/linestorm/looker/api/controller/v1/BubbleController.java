@@ -226,17 +226,17 @@ public class BubbleController extends UserBaseController{
     public void addPostFavor(){
         boolean r = false;
 
-        JSONObject userInfo = getCurrentUser(getPara("token"));
+        JSONObject user = getCurrentUser(getPara("token"));
         int post_id = getParaToInt("post_id", 0);
         int vote = getParaToInt("vote", 1);
 
-        PostVote pv  = new PostVote().set("post_id", post_id).set("user_id", userInfo.get("user_id"))
+        PostVote pv  = new PostVote().set("post_id", post_id).set("user_id", user.get("user_id"))
                 .set("vote", vote).set("created_time", DateUtils.getTimeStamp());
         r = pv.save();
         BubblePost bp = BubblePost.dao.findById(post_id);
         r = bp.set("like_count", bp.getInt("like_count")+vote).update();
         //在泡泡上显示变化
-        Notify.dao.notify(bp.getStr("user_id"), NotifyType.bubble_notify, bp.getStr("bubble_id"));
+        Notify.dao.notify(user.getString("user_id"), bp.getStr("user_id"), NotifyType.bubble_notify, bp.getStr("bubble_id"));
         if(r){
             responseData.put(ResponseCode.MSG, "点赞成功！");
         }else{
