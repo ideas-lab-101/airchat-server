@@ -157,28 +157,6 @@ public class SystemController extends AppBaseController {
 //        renderJson(rest);
 //    }
 
-    /**
-     * 升级检查,app本地版本小于服务端发布版本提示升级
-     */
-    @Clear(AppLoginInterceptor.class)
-    public void checkAppUpdate(){
-        String clientInfo = getPara("clientInfo");
-
-        JSONObject jo = JSONObject.fromObject(clientInfo);
-        AppVersion av = AppVersion.dao.findFirst("select * from sys_appVersion where OSType=? and blnRelease=1"
-                , jo.getString("OSType"));
-        if(av.getStr("VersionCode").compareTo(jo.getString("VersionCode"))<=0){
-            rest.error("您的客户端版本【"+jo.getString("VersionCode")+"】已是最新版！").setCode(-2);
-        }else{
-            data.put("versionDesc", av.getStr("VersionDesc"));
-            data.put("versionCode",av.getStr("VersionCode"));
-            data.put("downLoadURL", av.getStr("DownloadURL"));
-            rest.success("有新的版本可供下载").setData(data);
-        }
-//        responseData.put("timeStamp", DateUtils.getTimeStamp());
-        renderJson(rest);
-
-    }
 
     @Clear(AppLoginInterceptor.class)
     public void retrievePassword(){
@@ -250,6 +228,26 @@ public class SystemController extends AppBaseController {
             rest.success("Auth Success！").setData(data);
         }else{
             rest.error("Auth Failed！");
+        }
+        renderJson(rest);
+    }
+
+    /**
+     * 检查客户端版本
+     */
+    @Clear(AppLoginInterceptor.class)
+    public void checkAppVersion(){
+        String os = getPara("os");
+        String version = getPara("version");
+
+        AppVersion av = AppVersion.dao.findFirst("select * from app_version where os=? and state=1"
+                , os);
+        if(av.getStr("version").compareTo(version)<=0){
+            rest.error("你已更新到最新版！");
+        }else{
+            data.put("version_desc", av.getStr("version_desc"));
+            data.put("version_url", av.getStr("version_url"));
+            rest.success("有新的版本可下载！").setData(data);
         }
         renderJson(rest);
     }

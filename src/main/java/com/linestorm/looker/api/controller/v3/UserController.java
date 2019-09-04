@@ -74,4 +74,12 @@ public class UserController extends AppBaseController {
         renderJson(rest);
     }
 
+    /**
+     * 绑定手机号或邮箱，用于找回密码
+     */
+    @Before(Tx.class)
+    public void bindAccountVerification(){
+
+    }
+
 }

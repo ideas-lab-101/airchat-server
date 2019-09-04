@@ -33,7 +33,7 @@ public class Account extends Model<Account> {
 	    boolean r = false;
 		//计算千寻号-最大值加1
 		int sn = Db.findFirst("select max(snnumber) sn from user_login").getLong("sn").intValue()+1;
-        account = account.append("AC-"+sn);
+        account = account.append("AC"+sn);
 		Account a = new Account().set("login_name", account.toString()).set("snnumber", sn)
 				.set("password", password).set("deleted", 0).set("role_id", 2).set("created_time", DateUtils.getTimeStamp()).set("state", 1);
 		r = a.save();
