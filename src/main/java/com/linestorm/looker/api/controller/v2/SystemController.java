@@ -316,6 +316,7 @@ public class SystemController extends UserBaseController {
      */
     @Clear(UserLoginInterceptor.class)
     public void download(){
+
         render("/download.html");
     }
 
