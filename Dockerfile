@@ -3,6 +3,8 @@ LABEL MAINTAINER="flash520@163.com"
 # 拷贝执行文件
 COPY ./target/airchat/. /usr/local/tomcat/webapps/ROOT/
 
+#安装字体
+RUN apk add --update ttf-dejavu fontconfig && rm -rf /var/cache/apk/*
 # 运行 Tomcat
 WORKDIR /usr/local/tomcat/
 EXPOSE 80
