@@ -19,7 +19,6 @@ import com.linestorm.looker.extend.CaptchaRender;
 import com.linestorm.looker.model.sys.AppVersion;
 import com.linestorm.looker.model.user.SysUser;
 import com.sagacity.utility.DateUtils;
-import com.sun.deploy.ui.AppInfo;
 import net.sf.json.JSONObject;
 
 import java.util.List;
