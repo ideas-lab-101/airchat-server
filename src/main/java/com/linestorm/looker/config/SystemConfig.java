@@ -14,6 +14,7 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.template.Engine;
+import com.linestorm.looker.extend.MyRenderFactory;
 
 /**
  * API引导式配置
@@ -35,8 +36,11 @@ public class SystemConfig extends JFinalConfig {
 		//设置上传文件的基地址,如果不设置会上传到项目根目录的upload/目录下
 		me.setBaseUploadPath("/");
 
-		me.setError500View("/500Page.html"); //出错页面
-		me.setError404View("/404Page.html"); //找不到页面
+		//自定义错误反馈
+		me.setRenderFactory(new MyRenderFactory());
+
+//		me.setError500View("/500Page.html"); //出错页面
+//		me.setError404View("/404Page.html"); //找不到页面
 	}
 
 	/**

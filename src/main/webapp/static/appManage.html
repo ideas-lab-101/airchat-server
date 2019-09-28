@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>客户端管理</title>
+    <link rel="stylesheet" href="/asset/layui/css/layui.css">
+
+    <style>
+        body{padding: 20px; /*overflow-y: scroll;*/}
+    </style>
+</head>
+<body>
+
+<div style="padding: 10px; background-color: #F2F2F2;">
+    <div class="layui-row layui-col-space15">
+        #for(app : apps)
+        <div class="layui-col-md5" style="text-align: center;" >
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    #(app.os)
+                    <div style="margin-right: 6px;" class="layui-btn-group layui-layout-right">
+                        <i style="cursor: pointer;" onclick="edit(#(app.id))" class="layui-btn-sm">
+                            <i class="layui-icon">&#xe716;</i>
+                        </i>
+                    </div>
+                </div>
+                <div class="layui-card-body layui-form-pane">
+                    <div class="layui-form-item">
+                        #(app.version)
+                    </div>
+                    <div class="layui-form-item">
+                        #(app.version_desc)
+                    </div>
+                </div>
+            </div>
+        </div>
+        #end
+    </div>
+</div>
+
+<script src="/asset/layui/layui.js" charset="utf-8"></script>
+
+<script>
+
+    var layer;
+    layui.config({
+        base: '/asset/layui/extend/' //这是自定义模块的路径了
+    }).use(['layer','form'], function(){
+        layer = layui.layer; //弹层
+    })
+
+    /**
+     * 加载菜单
+     */
+    function edit(id) {
+        var url = 'editAppInfo?id='+id;
+        layer.open({
+            title: '编辑客户端信息',
+            type: 2,
+            area: ['640px', '360px'],
+            content: [url, 'no'],
+            cancel: function () {
+
+            },
+            end: function () {
+                location.reload();
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

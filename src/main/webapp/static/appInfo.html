@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>客户端信息</title>
+    <link rel="stylesheet" href="/asset/layui/css/layui.css">
+    <style>
+        body{
+            padding: 10px; /*overflow-y: scroll;*/
+        }
+        /**treeselect*/
+        .layui-form-select dl { max-height:200px; }
+    </style>
+</head>
+<body>
+<div>
+    <form class="layui-form layui-form-pane1 layui-inline">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">客户端</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="app.id" value="#(app.id)" lay-verify="required" required>
+                    <input style="width: 170px;" type="text" name="app.os" value="#(app.os)" lay-verify="required|title" required autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">版本</label>
+                <div class="layui-input-block">
+                <input style="width: 170px;" type="text" name="app.version" value="#(app.version)" lay-verify="required|title" required autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">下载地址</label>
+                <div class="layui-input-block">
+                    <input style="width: 470px;" type="text" name="app.version_url" value="#(app.version_url)" lay-verify="required|source" placeholder="请输入地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">版本描述</label>
+            <div class="layui-input-block">
+                <textarea name="course.Desc" style="width: 470px; height: 80px;" placeholder="请输入描述信息" class="layui-textarea">#(app.version_desc)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">保存修改</button>
+                <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/asset/layui/layui.js" charset="utf-8"></script>
+<script>
+    var layer, form, $;
+    layui.config({
+        base: '/asset/layui/extend/' //这是自定义模块的路径了
+    }).use(['layer','form'], function(){
+        layer = layui.layer; //弹层
+        form = layui.form;
+        $ = layui.$;
+
+        //监听表单提交
+        form.on('submit(*)', function(data){
+            // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            doSave(data.field);
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+    })
+
+    function doSave(formData) {
+        $.ajax({
+            url: "saveAppInfo",
+            type: "POST",
+            dataType: "json",
+            data: formData,
+            success: function(data) {
+                layer.msg(data.msg);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

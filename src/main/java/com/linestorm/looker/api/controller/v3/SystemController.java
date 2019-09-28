@@ -123,40 +123,6 @@ public class SystemController extends AppBaseController {
         renderJson(rest);
     }
 
-    /**
-     * 注册账号
-     */
-//    @Clear(AppLoginInterceptor.class)
-//    @Before(Tx.class)
-//    public void registerAccount(){
-//        boolean r = false;
-//        String account = getPara("account");
-//        String password = getPara("password");
-//        String registerCode = getPara("registerCode");
-//
-//        String languageSettings = getPara("languageSettings");
-//        String name = getPara("name");
-//        String sex = getPara("sex");
-//
-//        String public_key = getPara("publicKey");
-//
-//        if(CacheKit.get(SMSIdentifyCache, account).equals(registerCode)){
-//            Account na =  Account.dao.createAccount(account, password);
-//            //写附表
-//            r = new UserInfo().set("user_id", na.get("id")).set("username", name).set("sex", sex).set("language_settings", languageSettings)
-//                    .set("voice_settings", "cat").set("public_key", public_key)
-//                    .set("created_time", DateUtils.getTimeStamp()).set("deleted", 0).save();
-//            if(r){
-//                rest.success("注册成功");
-//            }else{
-//                rest.error("注册失败");
-//            }
-//        }else{
-//            rest.error("注册码错误").setCode(-2);
-//        }
-//        renderJson(rest);
-//    }
-
 
     @Clear(AppLoginInterceptor.class)
     public void retrievePassword(){
@@ -223,7 +189,6 @@ public class SystemController extends AppBaseController {
 
         Record record_user = Db.findFirst(SqlKit.sql("user.userAuth"), account, password);
         if (record_user != null){
-            code = 1 ;
             data.put("userInfo", record_user);
             rest.success("Auth Success！").setData(data);
         }else{
@@ -258,8 +223,6 @@ public class SystemController extends AppBaseController {
      * password —— 密码
      * deviceInfo —— 设备信息（包括uniqueID，deviceToken）
      */
-    private String AccountLockCacheName = "AccountLockCache";
-
     @Clear(AppLoginInterceptor.class)
     public void userLogin(){
         String account = getPara("account");
@@ -271,7 +234,7 @@ public class SystemController extends AppBaseController {
         String token = "";
 
         Record record_user = Db.findFirst(SqlKit.sql("user.userLoginIdentify"), account, password);
-        int errorCount = CacheKit.get(AccountLockCacheName, account)!= null ? (int) CacheKit.get(AccountLockCacheName, account) : 0 ;
+        int errorCount = CacheKit.get(CacheKey.CACHE_ACCOUNT_LOCK, account)!= null ? (int) CacheKit.get(CacheKey.CACHE_ACCOUNT_LOCK, account) : 0 ;
         if (errorCount < 5){
             if (record_user != null && record_user.getInt("role_id") == RoleType.AppUser){
                 token = HashKit.md5(DateUtils.getLongDateMilliSecond()+"");
@@ -281,7 +244,7 @@ public class SystemController extends AppBaseController {
                 o.put("addTime", DateUtils.nowDateTime());
                 o.put("userInfo", record_user.toJson());
                 o.put("deviceInfo", deviceInfo);
-                CacheKit.put(cacheName, token, o);
+                CacheKit.put(CacheKey.CACHE_USER_AUTH, token, o);
                 //更新用户设备表
                 if(deviceInfo != null){
                     UserDevice.dao.registerDeviceInfo(record_user.getInt("user_id")+"", deviceInfo);
@@ -289,7 +252,7 @@ public class SystemController extends AppBaseController {
                 msg.append("登录验证成功！");
                 code = 1 ;
             }else{
-                CacheKit.put(AccountLockCacheName, account, errorCount+1); //写入错误次数
+                CacheKit.put(CacheKey.CACHE_ACCOUNT_LOCK, account, errorCount+1); //写入错误次数
                 Record u = Db.findFirst("select * from user_login u where u.login_name=?", account);
                 if(u == null){
                     msg.append("用户账号不存在！");
@@ -319,7 +282,7 @@ public class SystemController extends AppBaseController {
         String token = getPara("token");
 
         UserDevice.dao.removeDeviceInfo(getCurrentUser(token).getString("user_id"));
-        CacheKit.remove(cacheName, token);
+        CacheKit.remove(CacheKey.CACHE_USER_AUTH, token);
         rest.success();
         renderJson(rest);
     }

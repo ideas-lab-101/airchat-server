@@ -26,10 +26,9 @@ import java.util.Map;
 @Before(AppLoginInterceptor.class)
 public abstract class AppBaseController extends Controller {
 
-    protected String cacheName = CacheKey.CACHE_USER_AUTH;
 	protected int pageSize = 20;
+    protected static String ROOTPATH = PathKit.getWebRootPath();
     protected Map<String, Object> data = new HashMap<String, Object>();
-	protected static String ROOTPATH = PathKit.getWebRootPath();
     public RestResult rest = new RestResult();
 	
 	public abstract void index();
@@ -43,7 +42,7 @@ public abstract class AppBaseController extends Controller {
      * 获得app登陆用户的当前用户信息
      */
     public JSONObject getCurrentUser(String token){
-        JSONObject jo = CacheKit.get(cacheName, token);
+        JSONObject jo = CacheKit.get(CacheKey.CACHE_USER_AUTH, token);
         if(jo!= null){
             return jo.getJSONObject("userInfo");
         }else{

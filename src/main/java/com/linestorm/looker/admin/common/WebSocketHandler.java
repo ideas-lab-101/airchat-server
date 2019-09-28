@@ -1,4 +1,4 @@
-package com.linestorm.looker.common;
+package com.linestorm.looker.admin.common;
 
 import com.jfinal.handler.Handler;
 import com.jfinal.kit.StrKit;

@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--design by erictang^_^-->
+
+    <title>AirChat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="/asset/css/buttons.css">
+    <link rel="stylesheet" href="/asset/css/responsive-nav.css">
+    <script src="/asset/js/responsive-nav.js"></script>
+
+    <style>
+        body {
+            background-color: #193c6d;
+
+            background-size: 100%;
+            margin: 0px;
+            animation:myfirst ;
+            animation-iteration-count:infinite;
+            animation-duration: 15s;
+            -webkit-animation-direction:alternate;
+        }
+
+
+        @keyframes myfirst
+        {
+            0%   {background: #cf8a0d
+            }
+            25%  {background: #14a7a6
+            }
+            50%  {background: #255f97
+            }
+            75%  {background: #289716
+            }
+            100% {background: #882697}
+
+        }
+
+
+        .full{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            right: 0;
+            color: aliceblue;
+            font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+
+        }
+
+
+        li{
+            float: left;
+            margin: 10px;
+
+        }
+        li a{
+            color: aliceblue;
+            text-decoration:none;
+
+        }
+        #ss{
+            position: absolute;
+
+            right: 0px;
+
+        }
+        footer{
+            height: 50px;
+            text-align: center;
+            width: 100%;
+            margin-top:10px;
+        }
+
+        .app-button{
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+
+<div class="full">
+
+
+    <div  class="nav-collapse">
+        <ul >
+            <li>
+                <a href="/admin/"class="button button-rounded button-highlight">AirChat</a>
+            </li>
+        
+        </ul>
+    </div> 
+    <script>
+        var navigation = responsiveNav(".nav-collapse");
+    </script>
+
+
+
+    <div class="main"style="margin: 100px;text-align: center">
+        <img src="/asset/image/airchat.png" style="border-radius:30px; width: 120px; height: auto;">
+        <h1>AirChat </h1>
+        <h3>基于密码学点对点加密通讯工具</h3> 
+        <a href="https://fir.im/airchat#" class="button button-highlight button-pill app-button">安卓版</a>
+        <a href="https://apps.apple.com/cn/app/id1450903231" class="button button-highlight button-pill app-button">iOS版</a>
+        <p style="font-size: 0.8em">比微信轻量</p>
+        <p style="font-size: 0.8em">更比微信安全</p>
+
+    </div>
+    <div class="content">
+    <div class="main-intro"style="text-align: left;width: 80%;padding-left: 30px;float: left">
+        <article>
+            <h2>为什么你会需要它？</h2>
+            <p>如果你看中个人隐私；如果你希望在这个隐私被滥用的时代，找到一款可以保护通信隐私的应用，airchat会是一个不错的选择。它是一个经过特殊设计、可以极大保障你通讯隐私的应用。</p>
+        </article>
+    </div>
+
+    <div class="second-intro"style="text-align: left;width: 80%;padding-left: 30px;float: left">
+
+        <article>
+            <h2>AirChat，一款让你放心的通讯工具</h2>
+            <p>1.注册不需要手机号、邮箱等个人系信息<br/>2.工业级点对点加密，让你的消息无法破解<br/>3.非对称加密算法，平台都无法破解或查看用户聊天记录<br/>4.支持无限制密钥计算更新<br/>5.支持多种消息类型<br/>6.支持消息阅后即焚</p>
+        </article>
+    </div>
+        <div style="clear: both"></div>
+
+    </div>
+    <footer>
+        <p style="color: gold;font-size: 0.9em">Email: contact.airchat@gmail.com</p>
+    </footer>
+
+
+
+</div>
+
+
+</body>
+<script src="/asset/js/wave.js"></script>
+<script>
+    var SEPARATION = 100,
+            AMOUNTX = 100,
+            AMOUNTY = 70;
+
+    var container;
+    var camera, scene, renderer;
+
+    var particles, particle, count = 0;
+
+    var mouseX = 85,
+            mouseY = -342;
+
+    var windowHalfX = window.innerWidth / 2;
+    var windowHalfY = window.innerHeight / 2;
+
+    init();
+    animate();
+
+    function init() {
+
+        container = document.createElement('div');
+        document.body.appendChild(container);
+
+        camera = new THREE.PerspectiveCamera(120, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 1000;
+
+        scene = new THREE.Scene();
+
+        particles = new Array();
+
+        var PI2 = Math.PI * 2;
+        var material = new THREE.ParticleCanvasMaterial({
+
+            color: 0xe1e1e1,
+            program: function(context) {
+
+                context.beginPath();
+                context.arc(0, 0, .6, 0, PI2, true);
+                context.fill();
+
+            }
+
+        });
+
+        var i = 0;
+
+        for (var ix = 0; ix < AMOUNTX; ix++) {
+
+            for (var iy = 0; iy < AMOUNTY; iy++) {
+
+                particle = particles[i++] = new THREE.Particle(material);
+                particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
+                particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
+                scene.add(particle);
+
+            }
+
+        }
+
+        renderer = new THREE.CanvasRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        document.addEventListener('mousemove', onDocumentMouseMove, false);
+        document.addEventListener('touchstart', onDocumentTouchStart, false);
+        document.addEventListener('touchmove', onDocumentTouchMove, false);
+
+        //
+
+        window.addEventListener('resize', onWindowResize, false);
+
+    }
+
+    function onWindowResize() {
+
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+    }
+
+    //
+
+    function onDocumentMouseMove(event) {
+
+        mouseX = event.clientX - windowHalfX;
+        mouseY = event.clientY - windowHalfY;
+
+    }
+
+    function onDocumentTouchStart(event) {
+
+        if (event.touches.length === 1) {
+
+            event.preventDefault();
+
+            mouseX = event.touches[0].pageX - windowHalfX;
+            mouseY = event.touches[0].pageY - windowHalfY;
+
+        }
+
+    }
+
+    function onDocumentTouchMove(event) {
+
+        if (event.touches.length === 1) {
+
+            event.preventDefault();
+
+            mouseX = event.touches[0].pageX - windowHalfX;
+            mouseY = event.touches[0].pageY - windowHalfY;
+
+        }
+
+    }
+
+    //
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        render();
+
+
+    }
+
+    function render() {
+
+        camera.position.x += (500 - camera.position.x) * .05;
+        camera.position.y += (500 - camera.position.y) * .05;
+        camera.lookAt(scene.position);
+
+        var i = 0;
+
+        for (var ix = 0; ix < AMOUNTX; ix++) {
+
+            for (var iy = 0; iy < AMOUNTY; iy++) {
+
+                particle = particles[i++];
+                particle.position.y = (Math.sin((ix + count) * 0.3) * 50) + (Math.sin((iy + count) * 0.5) * 50);
+                particle.scale.x = particle.scale.y = (Math.sin((ix + count) * 0.3) + 1) * 2 + (Math.sin((iy + count) * 0.5) + 1) * 2;
+
+            }
+
+        }
+
+        renderer.render(scene, camera);
+
+        count += 0.1;
+
+    }
+</script>
+
+</html>
+

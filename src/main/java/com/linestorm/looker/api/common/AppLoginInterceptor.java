@@ -25,7 +25,6 @@ import java.util.Map;
  */
 public class AppLoginInterceptor implements Interceptor {
 
-	private String cacheName = CacheKey.CACHE_USER_AUTH;
 	public RestResult rest = new RestResult();
 
 	/**
@@ -59,7 +58,7 @@ public class AppLoginInterceptor implements Interceptor {
 	public boolean checkUserCache(Controller controller){
 
 		String token = controller.getPara("token");
-		JSONObject jo = CacheKit.get(cacheName, token);
+		JSONObject jo = CacheKit.get(CacheKey.CACHE_USER_AUTH, token);
 		if (jo != null){
 			return true;
 		}

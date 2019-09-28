@@ -18,10 +18,16 @@ public class CacheKey {
 	
 	/** 导航目录缓存 */
 	public static final String CACHE_MENU = "menuCache";
-	
-	/** 用户授权缓存 */
+
+	/** 管理用户授权缓存 */
+	public static final String CACHE_ADMIN_AUTH = "AdminCache";
+
+	/** 普通用户授权缓存 */
 	public static final String CACHE_USER_AUTH = "UserCache";
 
 	/** 验证码缓存 */
 	public static final String CACHE_REG_CODE = "SMSIdentifyCache";
+
+	/** 错误锁定缓存*/
+	public static final String CACHE_ACCOUNT_LOCK = "AccountLockCache";
 }

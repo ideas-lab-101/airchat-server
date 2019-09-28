@@ -1,10 +1,11 @@
-package com.linestorm.looker.common;
+package com.linestorm.looker.admin.common;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.ehcache.CacheKit;
-import com.linestorm.looker.common.AdminLoginInterceptor;
+import com.linestorm.looker.extend.CacheKey;
+import com.linestorm.looker.extend.RestResult;
 import net.sf.json.JSONObject;
 
 import java.util.HashMap;
@@ -26,9 +27,8 @@ public abstract class AdminBaseController extends Controller {
 	
 	protected int pageSize = 20;
 	protected static String ROOTPATH = PathKit.getWebRootPath();
-	protected Map<String,Object> responseData = new HashMap<String, Object>();
-
-	private String cacheName = "AdminCache";
+	protected Map<String, Object> data = new HashMap<String, Object>();
+	public RestResult rest = new RestResult();
 	
 	public abstract void index();
 	
@@ -38,10 +38,10 @@ public abstract class AdminBaseController extends Controller {
 	}
 
 	public JSONObject getCurrentUser(){
-		String uid = getCookie("u_id");
-		JSONObject jo = CacheKit.get(cacheName, uid);
+		String token = getCookie("token");
+		JSONObject jo = CacheKit.get(CacheKey.CACHE_ADMIN_AUTH, token);
 		if(jo!= null){
-			return jo.getJSONObject("UserInfo");
+			return jo.getJSONObject("userInfo");
 		}else{
 			return null;
 		}

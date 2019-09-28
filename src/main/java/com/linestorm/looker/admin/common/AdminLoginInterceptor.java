@@ -1,9 +1,10 @@
-package com.linestorm.looker.common;
+package com.linestorm.looker.admin.common;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.ehcache.CacheKit;
+import com.linestorm.looker.extend.CacheKey;
 import net.sf.json.JSONObject;
 
 /**
@@ -18,7 +19,6 @@ import net.sf.json.JSONObject;
  */
 public class AdminLoginInterceptor implements Interceptor {
 
-	private String cacheName = "AdminCache";
 
 	/**
 	 * 绕过拦截器的方法名(注意:包括命名空间)
@@ -36,7 +36,7 @@ public class AdminLoginInterceptor implements Interceptor {
 		String html_web = "<script type=\"text/javascript\"> \n" +
 				"		  var flag = 'sagacity_timeout'; \n" +
 				"         var topWin = window.top; \n" +
-				"         topWin.location.href= '/login.html'; \n" +
+				"         topWin.location.href= '/index.html'; \n" +
 				"      </script> ";
 		Controller controller = arg0.getController();
 		if (checkUserCache(controller) || throughIntercept(arg0.getActionKey())) {
@@ -53,8 +53,8 @@ public class AdminLoginInterceptor implements Interceptor {
 	 */
 	public boolean checkUserCache(Controller controller){
 
-		String uid = controller.getCookie("u_id");
-		JSONObject jo = CacheKit.get(cacheName, uid);
+		String token = controller.getCookie("token");
+		JSONObject jo = CacheKit.get(CacheKey.CACHE_ADMIN_AUTH, token);
 		if (jo != null){
 			return true;
 		}
