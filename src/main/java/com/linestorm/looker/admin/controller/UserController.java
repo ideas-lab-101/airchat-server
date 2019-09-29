@@ -38,7 +38,7 @@ public class UserController extends AdminBaseController {
     }
 
     public void getUserList(){
-        String sql_select = "select ul.id,ul.login_name,ul.snnumber,from_unixtime(ul.created_time) created_time,ui.username,ul.state";
+        String sql_select = "select ul.id,ul.login_name,ul.snnumber,FROM_UNIXTIME(ul.created_time) created_time,ui.username,ul.state";
         String sql_from = "from user_login ul\n" +
                 "left join user_info ui on ui.user_id=ul.id\n" +
                 "where 1=1\n" +
