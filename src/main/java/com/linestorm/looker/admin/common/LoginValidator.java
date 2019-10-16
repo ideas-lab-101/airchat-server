@@ -42,7 +42,7 @@ public class LoginValidator extends Validator {
 
 	@Override
 	protected void handleError(Controller controller) {
-		controller.keepPara("loginName");
+		controller.keepPara("username");
 		controller.renderJson(rest);
 	}
 }

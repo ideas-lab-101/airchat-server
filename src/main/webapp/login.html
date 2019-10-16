@@ -36,7 +36,7 @@
                                     <div class="layui-form-item">
                                         <span style="display: inline-block;"><i class="iconfont icon-key"></i></span>
                                         <input type="text" id="capval" style="display:inline; width: 160px;" class="layui-input" required lay-verify="required" placeholder="验证码" maxlength="4" minlength="4"/>
-                                        <img id="captchaImg" alt="验证码" style="display: inline;" src="captcha" onclick ="this.src='captcha?'+Math.random()">
+                                        <img id="captchaImg" alt="验证码" style="display: inline;" src="admin/captcha" onclick ="this.src='admin/captcha?'+Math.random()">
                                     </div>
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">记住账号</label>
@@ -71,7 +71,7 @@
         function login() {
             setCookie();
             $.ajax({
-                url: "login",
+                url: "admin/login",
                 type: "GET",
                 dataType: "json",
                 data: {
@@ -81,7 +81,7 @@
                 },
                 success: function(data) {
                     if (data.code ==1) {
-                        window.open("home", "_self", "");
+                        window.open("admin/", "_self", "");
                     }else{
                         layer.msg(data.msg, {time:2000, offset: '100px'});
                     }
